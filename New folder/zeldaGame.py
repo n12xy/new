@@ -21,7 +21,7 @@ mixer.music.play(-1)
 #drawing surface
 size = (800, 700)
 screen = pygame.display.set_mode(size)
-pygame.display.set_caption("Pac Man")
+pygame.display.set_caption("Forest Legend")
 
 #getting screen width and height
 screenWidth = screen.get_width()
@@ -67,8 +67,16 @@ screen.fill(BLACK)
 
 ##Images found on intro screen
 #loading images into rect
-introScreenBackgroundImage = pygame.image.load("introscreen.jpg")
+introScreenBackgroundImage = pygame.image.load("introscreenBG.jpg")
 introScreenBackgroundRect = introScreenBackgroundImage.get_rect()
+
+#image for walking man
+walking = pygame.image.load("WalkingImage.png")
+walkingRect=walking.get_rect()
+walkingRect.x = 100
+walkingRect.y = 600
+walkingdx = 2
+walkingdy =0
 
 #loading images into rect
 forestImage = pygame.image.load("forestlegendbanner1.jpg")
@@ -82,7 +90,14 @@ legendRect.y= 140
 forestRect.x= 75
 forestRect.y= 50
 
-
+#images for final screen
+#loading images into rect
+finalBackgroundImage = pygame.image.load("finalscreen.png")
+finalBackgroundRect = introScreenBackgroundImage.get_rect()
+gameoverText = pygame.image.load("gameOver.gif")
+gameoverRect = gameoverText.get_rect()
+gameoverRect.x= 200
+gameoverRect.y= 100
 
 #Opening loops
 while main:
@@ -116,7 +131,7 @@ while main:
                 #button for first maze
                 if 297 <= mouse[0] <= 482 and 309 <= mouse[1] <= 348:
                     intro = False
-                    FirstMaze = True
+                    final = True
                 #Button for seconds maze
                 elif 297 <= mouse[0] <= 484 and 361 <= mouse[1] <= 398:
                     intro = False
@@ -126,10 +141,19 @@ while main:
                     ThirdMaze = True
 
         #code for screen design : images, text, etc.
+        clock.tick(FPS)
         #loading image onto screen
         screen.blit(introScreenBackgroundImage,introScreenBackgroundRect)
         screen.blit(forestImage, forestRect)
         screen.blit(legendImage,legendRect)
+
+        #loading image into screen
+        screen.blit(walking,walkingRect)
+        walkingRect.move_ip(walkingdx,walkingdy)
+
+        #if statements to prevent wall hits
+        if walkingRect.x >= 600:
+            walkingdx = -walkingdx
 
         #Adding play buttons
         #Maze 1
@@ -213,13 +237,60 @@ while main:
                 
 #code for ending screen
     while final :
+        #getting mouse coordinates saving as tuple (used later)
+        mouse = pygame.mouse.get_pos()
         for event in pygame.event.get():
             if event.type == pygame.QUIT :
                 main = False
-                final = False
-                
-        #screen design for second maze goes here
-        screen.fill(RED)
+                final = False               
+            #reaction to button click
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                #button to Exit
+                if 297 <= mouse[0] <= 482 and 410 <= mouse[1] <= 448:
+                    main = False
+                    final = False
+                #Button to go back to intro
+                elif 297 <= mouse[0] <= 484 and 361 <= mouse[1] <= 398:
+                    intro = True
+                    final = False
+
+                    
+        #screen design for game over screens goes here
+        screen.blit(finalBackgroundImage,finalBackgroundRect)
+        screen.blit(gameoverText,gameoverRect)
+
+        #button designs
+        #Home button
+        #Rendering/adding rect/location,drawing background rectangle
+        homeText = fontTitle3.render("Home",False,GREEN)
+        homeRect = homeText.get_rect()
+        homeRect.center = (centreX,380)
+        pygame.draw.rect(screen,WHITE,homeRect,0)
+        
+        #changing color if hovered on
+        if 297 <= mouse[0] <= 484 and 361 <= mouse[1] <= 398:
+            pygame.draw.rect(screen,colorlight,homeRect,0)
+        else:
+            pygame.draw.rect(screen,WHITE,homeRect,0)
+        #Blitting text into rect
+        screen.blit(homeText,homeRect)
+
+        #exit
+        #Rendering/adding rect/location,drawing background rectangle
+        exitText = fontTitle3.render("Exit",False,GREEN)
+        exitRect = exitText.get_rect()
+        exitRect.center = (centreX,430)
+        pygame.draw.rect(screen,WHITE,exitRect,0)
+        
+        #changing color if hovered on
+        if 297 <= mouse[0] <= 483 and 410 <= mouse[1] <= 448:
+            pygame.draw.rect(screen,colorlight,exitRect,0)
+        else:
+            pygame.draw.rect(screen,WHITE,exitRect,0)
+        #Blitting text into rect
+        screen.blit(exitText,exitRect)
+
+        #screen update       
         pygame.display.update()
 
         
