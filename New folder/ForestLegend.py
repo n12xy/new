@@ -128,13 +128,6 @@ forestRect = forestImage.get_rect()
 legendImage = pygame.image.load("forestlegendbanner2.jpg")
 legendRect = legendImage.get_rect()
 
-#loading image of moving man on intro screen
-walkImage = pygame.image.load("walkingRight.gif")
-walkRect = walkImage.get_rect()
-walkRect.x = 100
-walkRect.y = 600
-walkDx = 1
-walkDy=1
 
 #locations for text on intro screen 
 legendRect.x = 400
@@ -199,9 +192,7 @@ while main:
         screen.blit(introScreenBackgroundImage,introScreenBackgroundRect)
         screen.blit(forestImage, forestRect)
         screen.blit(legendImage,legendRect)
-        screen.blit(walkImage,walkRect)
-        
-        #Adding play buttons
+                #Adding play buttons
         #Maze 1
         #Rendering/adding rect/location,drawing background rectangle
         level1Text = fontTitle3.render("PLAY",False,GREEN)
